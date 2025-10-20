@@ -1,6 +1,87 @@
-<h2>Nombre encontrado</h2>
-<p>Nombre: {{ name()?.name }}</p>
-<p>Fecha: {{ name()?.date }}</p>
-<p>Marcado: {{ name()?.checked }}</p>
-<p>Significado: {{ name()?.meaning }}</p>
-<p>Detalles: {{ name()?.details }}</p>
+<div class="min-h-screen bg-background">
+  <header class="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-b border-border">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+      <div class="flex items-center gap-3 mb-6 flex-col">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-book-open h-10 w-10 text-primary">
+          <path d="M12 7v14"></path>
+          <path
+            d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z">
+          </path>
+        </svg>
+        <h1 class="text-4xl md:text-5xl font-bold text-foreground text-center">
+          Directorio de nombres en Español
+        </h1>
+      </div>
+      <p class="text-lg text-muted-foreground mb-6 text-center">
+        ¿Eres capaz de completarlos todos 😜?
+      </p>
+      <div class="relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input type="text"
+          class="flex w-full rounded-md border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10 h-12 text-lg border-2 focus-visible:ring-primary"
+          placeholder="Busca nombres españoles..." value="" (input)="onSearchName($event)">
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="mb-6">
+      @if (filter().pageSize) {
+      <p class="text-sm text-muted-foreground">
+        Mostrando {{ filter().total < filter().pageSize ? filter().total : filter().pageSize }} {{ filter().pageSize === 1 ? 'nombre' : 'nombres' }}
+      </p>
+      }
+    </div>
+    
+    @if (groupLoading()) {
+      <img class="mx-auto" [src]="book64path" alt="boo_loader" />
+    } @else {
+      @for (goupedName of groupedNames(); track $index) {
+      <div class="space-y-8">
+        <div class="space-y-3">
+          <h2 class="text-2xl font-bold text-primary sticky top-0 bg-background/80 backdrop-blur-sm py-2 z-10">{{
+            goupedName.letter }}</h2>
+          @for (name of goupedName.list; track $index) {
+          <nz-collapse [nzExpandIconPosition]="'end'">
+            <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
+              @if (isLoadingName()) {
+                    <img [src]="book64path" />
+  
+                  } @else {
+                    <p>Fecha: {{ name.date }}</p>
+                    <p>Conocido: <nz-switch [ngModel]="name.checked"></nz-switch></p>
+                    <p>Significado: {{ name.meaning }}</p>
+                    <p>Detalles: {{ name.details }}</p>
+                  }
+            </nz-collapse-panel>
+          </nz-collapse>
+          }
+        </div>
+      </div>
+      }
+
+      <nz-pagination
+      [nzPageIndex]="filter().page"
+      [nzTotal]="filter().total"
+      [nzPageSize]="filter().pageSize"
+      [nzShowTotal]="rangeTemplate"
+      [nzResponsive]="true"
+      [nzSize]="'small'"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChanges($event)"
+      class="mt-[20px] flex justify-end"
+      >
+    </nz-pagination>
+      <ng-template #rangeTemplate let-range="range" let-total>
+        {{ range[0] }}-{{ range[1] }} of {{ total }} items
+      </ng-template>
+    }
+  </main>
+</div>
