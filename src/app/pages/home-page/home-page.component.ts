@@ -13,6 +13,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { GroupedName, Name } from '../../models/names.model';
 import { Filter } from '../../models/request.model';
 import { bookGifBase64 } from '../../constants/base64.constant';
+import { NgClass } from '@angular/common';
+import { PunctuationService } from '../../services/punctuation.service';
 
 @Component({
   selector: 'app-home-page',
@@ -24,7 +26,8 @@ import { bookGifBase64 } from '../../constants/base64.constant';
     NzIconModule,
     NzSelectModule,
     NzSpinModule,
-    NzPaginationModule
+    NzPaginationModule,
+    NgClass
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
@@ -32,40 +35,61 @@ import { bookGifBase64 } from '../../constants/base64.constant';
 export class HomePageComponent implements OnInit {
   /* Injections */
   private readonly _nameService = inject(NameService);
+  private readonly _punctuationService = inject(PunctuationService);
 
   /* Signals */
   //name = this._nameService.name;
   groupedNames = this._nameService.groupedNames;
   isLoadingName = this._nameService.isLoadingName;
+  isLoadingMap = this._nameService.isLoadingMap;
   groupLoading = this._nameService.groupLoading;
   filter = this._nameService.filter;
+  punctuationAdri = this._punctuationService.punctuationAdri;
+  punctuationElena = this._punctuationService.punctuationElena;
 
   /* variables */
-  searching: boolean = false;
   book64path: string = bookGifBase64;
   searchValue: string = '';
+  counter: number = 1000;
+  interval: any;
 
   private getAllNames(): void {
     this._nameService.getAllNames(this.filter()).subscribe();
   }
 
+  private setCounter(duration: number): void {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.counter = 1000;
+    this.interval = setInterval(() => {
+      this.counter -= duration;
+    
+      if (this.counter < 0) {
+        if (this.interval) {
+          clearInterval(this.interval);
+        }
+        this._nameService.getAllNames(this.filter()).subscribe({
+          next: (resp: GroupedName[]) => this.counter = 1000
+        });
+      }
+    }, duration);
+  }
+
+  private getPunctuation(): void {
+    this._punctuationService.getPunctuation().subscribe();
+  }
+
   ngOnInit(): void {
     this.getAllNames();
+    this.getPunctuation();
   }
 
   onSearchName(event: Event): void {
     const value = (event.target as HTMLInputElement).value
-    if (this.searching) {
-      this.searchValue = value;
-      return;
-    };
-    this.searching = true;
-    this._nameService.updateFilters({...this.filter(), coincidence: this.searchValue})
-    setTimeout(() => {
-      this._nameService.getAllNames(this.filter()).subscribe({
-        next: (resp: GroupedName[]) => this.searching = false
-      });
-    }, 1000);
+    this.searchValue = value;
+    this._nameService.updateFilters({...this.filter(), coincidence: value});
+    this.setCounter(250);
   }
 
   onGetNameInfoByName(name: string): void {
@@ -84,12 +108,16 @@ export class HomePageComponent implements OnInit {
     this.getAllNames();
   }
 
-  onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean) {
-    const checked = {
-      [identity === 'Adri' ? "checkedByAdri" : "checkedByElena"]: value
+  onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean, name: string) {
+    const body = {
+      [identity === 'Adri' ? "checkedByAdri" : "checkedByElena"]: value,
+      name
     } 
-    this._nameService.updateName(nameId, checked).subscribe({
-      next: (resp: Name) => this._nameService.updateEditedName(resp)
+    this._nameService.updateName(nameId, body).subscribe({
+      next: (resp: Name) => {
+        this._nameService.updateEditedName(resp);
+        this.getPunctuation();
+      }
     })
   }
 }

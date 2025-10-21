@@ -7,9 +7,12 @@
     text-align: right;
   }
   #adrian-1 .ant-switch-checked {
-    background-color: #076fed;
+    background-color: #319ebf;
   }
   #elena-1 .ant-switch-checked {
-    background-color: #ec4699;
+    background-color: #58c990;
+  }
+  .ant-collapse > .ant-collapse-item > div.ant-collapse-header {
+    color: inherit;
   }
 }
