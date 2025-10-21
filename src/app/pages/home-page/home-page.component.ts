@@ -39,6 +39,7 @@ export class HomePageComponent implements OnInit {
   //name = this._nameService.name;
   groupedNames = this._nameService.groupedNames;
   isLoadingName = this._nameService.isLoadingName;
+  isLoadingEdition = this._nameService.isLoadingEdition;
   groupLoading = this._nameService.groupLoading;
   filter = this._nameService.filter;
 

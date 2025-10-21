@@ -17,6 +17,7 @@ export class NameService {
   private _editedName = signal<Name | null>(null);
   private _groupedNames = signal<GroupedName[] | []>([]);
   private _isLoadingName = signal<boolean>(false);
+  private _isLoadingEdition = signal<boolean>(false);
   private _groupLoading = signal<boolean>(false);
   private _filter = signal<Filter>({
     coincidence: '',
@@ -29,6 +30,7 @@ export class NameService {
   editedName = this._editedName.asReadonly();
   groupedNames = this._groupedNames.asReadonly();
   isLoadingName = this._isLoadingName.asReadonly();
+  isLoadingEdition = this._isLoadingEdition.asReadonly();
   groupLoading = this._groupLoading.asReadonly();
   filter = this._filter.asReadonly();
 
@@ -45,11 +47,14 @@ export class NameService {
   }
 
   updateName(id: string, name: Partial<Name>): Observable<Name> {
+    this._isLoadingEdition.set(true);
     return this._http.put<Name>(environment.apiUrl + '/names/' + id, name)
       .pipe(map((name: Name) => {
         this._editedName.set(name);
         return name;
-      }));
+      }),
+      finalize(() => this._isLoadingEdition.set(false))
+    );
   }
 
   getAllNames({ coincidence, page, pageSize }: Filter): Observable<GroupedName[]> {
@@ -83,17 +88,4 @@ export class NameService {
       return prev;
     })
   }
-
-  // getGroupedNames({ coincidence, page, pageSize }: Filter): Observable<GroupedName[]> {
-  //   this._groupLoading.set(true);
-  //   const params: Record<string, any> = { coincidence, page, pageSize }
-  //   return this._http.get<GroupedName[]>(environment.apiUrl + '/names/grouped', { params })
-  //     .pipe(
-  //       map((names: GroupedName[]) => {
-  //         this._groupedNames.set(names);
-  //         return names;
-  //       }),
-  //       finalize(() => this._groupLoading.set(false))
-  //     );
-  // }
 }

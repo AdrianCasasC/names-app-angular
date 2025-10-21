@@ -21,22 +21,22 @@
         <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-award h-5 w-5 text-[#076fed]">
+            class="lucide lucide-award h-5 w-5 text-[#319ebf]">
             <path
               d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
             </path>
             <circle cx="12" cy="8" r="6"></circle>
-          </svg><span class="font-semibold text-[#076fed]">Adrian:</span><span
+          </svg><span class="font-semibold text-[#319ebf]">Adrian:</span><span
             class="font-bold text-foreground">0</span></div>
         <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-award h-5 w-5 text-[#3ed94a]">
+            class="lucide lucide-award h-5 w-5 text-[#58c990]">
             <path
               d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
             </path>
             <circle cx="12" cy="8" r="6"></circle>
-          </svg><span class="font-semibold text-[#3ed94a]">Elena:</span><span class="font-bold text-foreground">0</span>
+          </svg><span class="font-semibold text-[#58c990]">Elena:</span><span class="font-bold text-foreground">0</span>
         </div>
       </div>
       <div class="relative">
@@ -73,42 +73,49 @@
         @for (name of goupedName.list; track $index) {
         <nz-collapse
         class="transition-[background-color] duration-300"
-        [class.bg-[#076fed]]="name.checkedByAdri"
+        [class.bg-[#319ebf]]="name.checkedByAdri"
         [class.text-white]="name.checkedByAdri || name.checkedByElena"
-        [class.bg-[#3ed94a]]="name.checkedByElena"
+        [class.bg-[#58c990]]="name.checkedByElena"
         [ngClass]="{
-          'bg-gradient-to-r from-[#076fed] to-[#3ed94a]': name.checkedByAdri && name.checkedByElena
+          'bg-gradient-to-r from-[#319ebf] to-[#58c990]': name.checkedByAdri && name.checkedByElena
         }"
         [nzExpandIconPosition]="'end'">
           <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
             @if (isLoadingName()) {
-            <img [src]="book64path" />
-
+              <img [src]="book64path" />
             } @else {
-            <p>Fecha: {{ name.date }}</p>
-            <p>Significado: {{ name.meaning }}</p>
-            <p>Detalles: {{ name.details }}</p>
-            <div class="pt-3 border-t border-border"><span
-                class="text-sm font-medium text-muted-foreground mb-3 block">¿Quién conoce a alguien con este nombre?</span>
-              <div class="flex gap-6">
-                <div class="flex items-center space-x-2">
-                  <label
-                    class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
-                    for="adrian-1" style="color: hsl(var(--adrian));">
-                    Adrian
-                  </label>
-                  <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri" (ngModelChange)="onSwitchChange(name._id, 'Adri', $event)"></nz-switch>
+              <div class="relative">
+                
+                <p>Fecha: {{ name.date }}</p>
+                <p>Significado: {{ name.meaning }}</p>
+                <p>Detalles: {{ name.details }}</p>
+                <div class="pt-3 border-t border-border"><span
+                    class="text-sm font-medium text-muted-foreground mb-3 block">¿Quién conoce a alguien con este nombre?</span>
+                  <div class="flex gap-6">
+                    <div class="flex items-center space-x-2">
+                      <label
+                        class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                        for="adrian-1" style="color: hsl(var(--adrian));">
+                        Adrian
+                      </label>
+                      <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri" (ngModelChange)="onSwitchChange(name._id, 'Adri', $event)"></nz-switch>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <label
+                        class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                        for="elena-1" style="color: hsl(var(--elena));">
+                        Elena
+                      </label>
+                      <nz-switch id="elena-1" [ngModel]="name.checkedByElena" (ngModelChange)="onSwitchChange(name._id, 'Elena', $event)"></nz-switch>
+                    </div>
+                  </div>
                 </div>
-                <div class="flex items-center space-x-2">
-                  <label
-                    class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
-                    for="elena-1" style="color: hsl(var(--elena));">
-                    Elena
-                  </label>
-                  <nz-switch id="elena-1" [ngModel]="name.checkedByElena" (ngModelChange)="onSwitchChange(name._id, 'Elena', $event)"></nz-switch>
-                </div>
+                @if (isLoadingEdition()) {
+                  <div class="absolute left-0 top-0 w-full h-full bg-white/70 flex justify-center items-center">
+                    <img class="h-full" [src]="book64path" />
+                  </div>
+                }
               </div>
-            </div>
             }
           </nz-collapse-panel>
         </nz-collapse>
