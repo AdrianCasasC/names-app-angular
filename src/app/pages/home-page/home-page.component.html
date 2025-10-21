@@ -55,7 +55,7 @@
 
   <main class="container mx-auto px-4 py-8 max-w-4xl">
     <div class="mb-6">
-      @if (filter().pageSize) {
+      @if (filter().pageSize && !groupLoading()) {
       <p class="text-sm text-muted-foreground">
         Mostrando {{ filter().total < filter().pageSize ? filter().total : filter().pageSize }} {{ filter().pageSize===1
           ? 'nombre' : 'nombres' }} </p>
