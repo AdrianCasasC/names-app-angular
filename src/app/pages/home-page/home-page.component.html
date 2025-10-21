@@ -17,6 +17,28 @@
       <p class="text-lg text-muted-foreground mb-6 text-center">
         ¿Eres capaz de completarlos todos 😜?
       </p>
+      <div class="flex gap-4 mb-6">
+        <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
+            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-award h-5 w-5 text-[#076fed]">
+            <path
+              d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
+            </path>
+            <circle cx="12" cy="8" r="6"></circle>
+          </svg><span class="font-semibold text-[#076fed]">Adrian:</span><span
+            class="font-bold text-foreground">0</span></div>
+        <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
+            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-award h-5 w-5 text-[#ec4699]">
+            <path
+              d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
+            </path>
+            <circle cx="12" cy="8" r="6"></circle>
+          </svg><span class="font-semibold text-[#ec4699]">Elena:</span><span class="font-bold text-foreground">0</span>
+        </div>
+      </div>
       <div class="relative">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -35,53 +57,69 @@
     <div class="mb-6">
       @if (filter().pageSize) {
       <p class="text-sm text-muted-foreground">
-        Mostrando {{ filter().total < filter().pageSize ? filter().total : filter().pageSize }} {{ filter().pageSize === 1 ? 'nombre' : 'nombres' }}
-      </p>
-      }
-    </div>
-    
-    @if (groupLoading()) {
-      <img class="mx-auto" [src]="book64path" alt="boo_loader" />
-    } @else {
-      @for (goupedName of groupedNames(); track $index) {
-      <div class="space-y-8">
-        <div class="space-y-3">
-          <h2 class="text-2xl font-bold text-primary sticky top-0 bg-background/80 backdrop-blur-sm py-2 z-10">{{
-            goupedName.letter }}</h2>
-          @for (name of goupedName.list; track $index) {
-          <nz-collapse [nzExpandIconPosition]="'end'">
-            <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
-              @if (isLoadingName()) {
-                    <img [src]="book64path" />
-  
-                  } @else {
-                    <p>Fecha: {{ name.date }}</p>
-                    <p>Conocido: <nz-switch [ngModel]="name.checked"></nz-switch></p>
-                    <p>Significado: {{ name.meaning }}</p>
-                    <p>Detalles: {{ name.details }}</p>
-                  }
-            </nz-collapse-panel>
-          </nz-collapse>
+        Mostrando {{ filter().total < filter().pageSize ? filter().total : filter().pageSize }} {{ filter().pageSize===1
+          ? 'nombre' : 'nombres' }} </p>
           }
-        </div>
-      </div>
-      }
+    </div>
 
-      <nz-pagination
-      [nzPageIndex]="filter().page"
-      [nzTotal]="filter().total"
-      [nzPageSize]="filter().pageSize"
-      [nzShowTotal]="rangeTemplate"
-      [nzResponsive]="true"
-      [nzSize]="'small'"
-      (nzPageIndexChange)="onPageIndexChange($event)"
-      (nzPageSizeChange)="onPageSizeChanges($event)"
-      class="mt-[20px] flex justify-end"
-      >
+    @if (groupLoading()) {
+    <img class="mx-auto" [src]="book64path" alt="boo_loader" />
+    } @else {
+    @for (goupedName of groupedNames(); track $index) {
+    <div class="space-y-8">
+      <div class="space-y-3">
+        <h2 class="text-2xl font-bold text-primary sticky top-0 bg-background/80 backdrop-blur-sm py-2 z-10">{{
+          goupedName.letter }}</h2>
+        @for (name of goupedName.list; track $index) {
+        <nz-collapse
+        [class.bg-[#076fed]]="name.checkedByAdri"
+        [class.bg-[#ec4699]]="name.checkedByElena"
+        [nzExpandIconPosition]="'end'">
+          <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
+            @if (isLoadingName()) {
+            <img [src]="book64path" />
+
+            } @else {
+            <p>Fecha: {{ name.date }}</p>
+            <p>Significado: {{ name.meaning }}</p>
+            <p>Detalles: {{ name.details }}</p>
+            <div class="pt-3 border-t border-border"><span
+                class="text-sm font-medium text-muted-foreground mb-3 block">¿Quién conoce a alguien con este nombre?</span>
+              <div class="flex gap-6">
+                <div class="flex items-center space-x-2">
+                  <label
+                    class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                    for="adrian-1" style="color: hsl(var(--adrian));">
+                    Adrian
+                  </label>
+                  <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri" (ngModelChange)="onSwitchChange(name._id, 'Adri', $event)"></nz-switch>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <label
+                    class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                    for="elena-1" style="color: hsl(var(--elena));">
+                    Elena
+                  </label>
+                  <nz-switch id="elena-1" [ngModel]="name.checkedByElena" (ngModelChange)="onSwitchChange(name._id, 'Elena', $event)"></nz-switch>
+                </div>
+              </div>
+            </div>
+            }
+          </nz-collapse-panel>
+        </nz-collapse>
+        }
+      </div>
+    </div>
+    }
+
+    <nz-pagination [nzPageIndex]="filter().page" [nzTotal]="filter().total" [nzPageSize]="filter().pageSize"
+      [nzShowTotal]="rangeTemplate" [nzResponsive]="true" [nzSize]="'small'"
+      (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChanges($event)"
+      class="mt-[20px] flex justify-end">
     </nz-pagination>
-      <ng-template #rangeTemplate let-range="range" let-total>
-        {{ range[0] }}-{{ range[1] }} of {{ total }} items
-      </ng-template>
+    <ng-template #rangeTemplate let-range="range" let-total>
+      {{ range[0] }}-{{ range[1] }} of {{ total }} items
+    </ng-template>
     }
   </main>
 </div>
