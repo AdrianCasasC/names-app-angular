@@ -44,8 +44,8 @@ export class NameService {
       );
   }
 
-  updateName(name: Name): Observable<Name> {
-    return this._http.put<Name>(environment.apiUrl + '/names/' + name.id, name)
+  updateName(id: string, name: Partial<Name>): Observable<Name> {
+    return this._http.put<Name>(environment.apiUrl + '/names/' + id, name)
       .pipe(map((name: Name) => {
         this._editedName.set(name);
         return name;
@@ -68,6 +68,20 @@ export class NameService {
 
   updateFilters(newFilter: Filter): void {
     this._filter.set(newFilter);
+  }
+
+  updateEditedName(name: Name) {
+    const firstLetter = name.name[0].toUpperCase();
+    this._groupedNames.update(prev => {
+      const groupedIndex = prev.findIndex(prev => prev.letter === firstLetter )
+      if (groupedIndex != -1) {
+        const foundNameIndex = prev.find(prev => prev.letter === firstLetter )?.list.findIndex(groupedName => groupedName._id === name._id);
+        if (foundNameIndex != -1) {
+          prev[groupedIndex].list[foundNameIndex!] = name
+        }
+      }
+      return prev;
+    })
   }
 
   // getGroupedNames({ coincidence, page, pageSize }: Filter): Observable<GroupedName[]> {

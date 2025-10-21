@@ -1,8 +1,9 @@
 export interface Name {
-    id: number;
+    _id: string;
     name: string;
     date: Date;
-    checked: boolean;
+    checkedByAdri: boolean;
+    checkedByElena: boolean;
     meaning: string;
     details: string;
 }
@@ -18,3 +19,4 @@ export interface PaginatedNames {
   pageSize: number;
   total: number;
 }
+

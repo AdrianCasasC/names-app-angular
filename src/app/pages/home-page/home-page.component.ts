@@ -10,7 +10,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
-import { GroupedName } from '../../models/names.model';
+import { GroupedName, Name } from '../../models/names.model';
 import { Filter } from '../../models/request.model';
 import { bookGifBase64 } from '../../constants/base64.constant';
 
@@ -42,7 +42,8 @@ export class HomePageComponent implements OnInit {
 
   /* variables */
   searching: boolean = false;
-  book64path = bookGifBase64;
+  book64path: string = bookGifBase64;
+  searchValue: string = '';
 
   private getAllNames(): void {
     this._nameService.getAllNames(this.filter()).subscribe();
@@ -53,9 +54,13 @@ export class HomePageComponent implements OnInit {
   }
 
   onSearchName(event: Event): void {
-    if (this.searching) return;
+    const value = (event.target as HTMLInputElement).value
+    if (this.searching) {
+      this.searchValue = value;
+      return;
+    };
     this.searching = true;
-    this._nameService.updateFilters({...this.filter(), coincidence: (event.target as HTMLInputElement).value})
+    this._nameService.updateFilters({...this.filter(), coincidence: this.searchValue})
     setTimeout(() => {
       this._nameService.getAllNames(this.filter()).subscribe({
         next: (resp: GroupedName[]) => this.searching = false
@@ -77,5 +82,14 @@ export class HomePageComponent implements OnInit {
   onPageSizeChanges(newPageSize: number): void {
     this._nameService.updateFilters({...this.filter(), pageSize: newPageSize});
     this.getAllNames();
+  }
+
+  onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean) {
+    const checked = {
+      [identity === 'Adri' ? "checkedByAdri" : "checkedByElena"]: value
+    } 
+    this._nameService.updateName(nameId, checked).subscribe({
+      next: (resp: Name) => this._nameService.updateEditedName(resp)
+    })
   }
 }
