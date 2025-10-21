@@ -31,12 +31,12 @@
         <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-award h-5 w-5 text-[#ec4699]">
+            class="lucide lucide-award h-5 w-5 text-[#3ed94a]">
             <path
               d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
             </path>
             <circle cx="12" cy="8" r="6"></circle>
-          </svg><span class="font-semibold text-[#ec4699]">Elena:</span><span class="font-bold text-foreground">0</span>
+          </svg><span class="font-semibold text-[#3ed94a]">Elena:</span><span class="font-bold text-foreground">0</span>
         </div>
       </div>
       <div class="relative">
@@ -72,8 +72,13 @@
           goupedName.letter }}</h2>
         @for (name of goupedName.list; track $index) {
         <nz-collapse
+        class="transition-[background-color] duration-300"
         [class.bg-[#076fed]]="name.checkedByAdri"
-        [class.bg-[#ec4699]]="name.checkedByElena"
+        [class.text-white]="name.checkedByAdri || name.checkedByElena"
+        [class.bg-[#3ed94a]]="name.checkedByElena"
+        [ngClass]="{
+          'bg-gradient-to-r from-[#076fed] to-[#3ed94a]': name.checkedByAdri && name.checkedByElena
+        }"
         [nzExpandIconPosition]="'end'">
           <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
             @if (isLoadingName()) {

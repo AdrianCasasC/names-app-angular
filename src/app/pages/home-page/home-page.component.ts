@@ -13,6 +13,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { GroupedName, Name } from '../../models/names.model';
 import { Filter } from '../../models/request.model';
 import { bookGifBase64 } from '../../constants/base64.constant';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-home-page',
@@ -24,7 +25,8 @@ import { bookGifBase64 } from '../../constants/base64.constant';
     NzIconModule,
     NzSelectModule,
     NzSpinModule,
-    NzPaginationModule
+    NzPaginationModule,
+    NgClass
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
