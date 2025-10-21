@@ -27,7 +27,7 @@
             </path>
             <circle cx="12" cy="8" r="6"></circle>
           </svg><span class="font-semibold text-[#319ebf]">Adrian:</span><span
-            class="font-bold text-foreground">0</span></div>
+            class="font-bold text-foreground">{{ punctuationAdri()?.total}}</span></div>
         <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -36,7 +36,7 @@
               d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
             </path>
             <circle cx="12" cy="8" r="6"></circle>
-          </svg><span class="font-semibold text-[#58c990]">Elena:</span><span class="font-bold text-foreground">0</span>
+          </svg><span class="font-semibold text-[#58c990]">Elena:</span><span class="font-bold text-foreground">{{ punctuationElena()?.total }}</span>
         </div>
       </div>
       <div class="relative">
@@ -98,7 +98,7 @@
                         for="adrian-1" style="color: hsl(var(--adrian));">
                         Adrian
                       </label>
-                      <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri" (ngModelChange)="onSwitchChange(name._id, 'Adri', $event)"></nz-switch>
+                      <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri" (ngModelChange)="onSwitchChange(name._id, 'Adri', $event, name.name)"></nz-switch>
                     </div>
                     <div class="flex items-center space-x-2">
                       <label
@@ -106,11 +106,11 @@
                         for="elena-1" style="color: hsl(var(--elena));">
                         Elena
                       </label>
-                      <nz-switch id="elena-1" [ngModel]="name.checkedByElena" (ngModelChange)="onSwitchChange(name._id, 'Elena', $event)"></nz-switch>
+                      <nz-switch id="elena-1" [ngModel]="name.checkedByElena" (ngModelChange)="onSwitchChange(name._id, 'Elena', $event, name.name)"></nz-switch>
                     </div>
                   </div>
                 </div>
-                @if (isLoadingEdition()) {
+                @if (isLoadingMap().get(name._id)) {
                   <div class="absolute left-0 top-0 w-full h-full bg-white/70 flex justify-center items-center">
                     <img class="h-full" [src]="book64path" />
                   </div>

@@ -14,6 +14,7 @@ import { GroupedName, Name } from '../../models/names.model';
 import { Filter } from '../../models/request.model';
 import { bookGifBase64 } from '../../constants/base64.constant';
 import { NgClass } from '@angular/common';
+import { PunctuationService } from '../../services/punctuation.service';
 
 @Component({
   selector: 'app-home-page',
@@ -34,14 +35,17 @@ import { NgClass } from '@angular/common';
 export class HomePageComponent implements OnInit {
   /* Injections */
   private readonly _nameService = inject(NameService);
+  private readonly _punctuationService = inject(PunctuationService);
 
   /* Signals */
   //name = this._nameService.name;
   groupedNames = this._nameService.groupedNames;
   isLoadingName = this._nameService.isLoadingName;
-  isLoadingEdition = this._nameService.isLoadingEdition;
+  isLoadingMap = this._nameService.isLoadingMap;
   groupLoading = this._nameService.groupLoading;
   filter = this._nameService.filter;
+  punctuationAdri = this._punctuationService.punctuationAdri;
+  punctuationElena = this._punctuationService.punctuationElena;
 
   /* variables */
   book64path: string = bookGifBase64;
@@ -72,8 +76,13 @@ export class HomePageComponent implements OnInit {
     }, duration);
   }
 
+  private getPunctuation(): void {
+    this._punctuationService.getPunctuation().subscribe();
+  }
+
   ngOnInit(): void {
     this.getAllNames();
+    this.getPunctuation();
   }
 
   onSearchName(event: Event): void {
@@ -99,12 +108,16 @@ export class HomePageComponent implements OnInit {
     this.getAllNames();
   }
 
-  onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean) {
-    const checked = {
-      [identity === 'Adri' ? "checkedByAdri" : "checkedByElena"]: value
+  onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean, name: string) {
+    const body = {
+      [identity === 'Adri' ? "checkedByAdri" : "checkedByElena"]: value,
+      name
     } 
-    this._nameService.updateName(nameId, checked).subscribe({
-      next: (resp: Name) => this._nameService.updateEditedName(resp)
+    this._nameService.updateName(nameId, body).subscribe({
+      next: (resp: Name) => {
+        this._nameService.updateEditedName(resp);
+        this.getPunctuation();
+      }
     })
   }
 }
