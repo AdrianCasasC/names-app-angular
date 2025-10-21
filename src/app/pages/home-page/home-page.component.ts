@@ -41,12 +41,32 @@ export class HomePageComponent implements OnInit {
   filter = this._nameService.filter;
 
   /* variables */
-  searching: boolean = false;
   book64path: string = bookGifBase64;
   searchValue: string = '';
+  counter: number = 1000;
+  interval: any;
 
   private getAllNames(): void {
     this._nameService.getAllNames(this.filter()).subscribe();
+  }
+
+  private setCounter(duration: number): void {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.counter = 1000;
+    this.interval = setInterval(() => {
+      this.counter -= duration;
+    
+      if (this.counter < 0) {
+        if (this.interval) {
+          clearInterval(this.interval);
+        }
+        this._nameService.getAllNames(this.filter()).subscribe({
+          next: (resp: GroupedName[]) => this.counter = 1000
+        });
+      }
+    }, duration);
   }
 
   ngOnInit(): void {
@@ -55,17 +75,9 @@ export class HomePageComponent implements OnInit {
 
   onSearchName(event: Event): void {
     const value = (event.target as HTMLInputElement).value
-    if (this.searching) {
-      this.searchValue = value;
-      return;
-    };
-    this.searching = true;
-    this._nameService.updateFilters({...this.filter(), coincidence: this.searchValue})
-    setTimeout(() => {
-      this._nameService.getAllNames(this.filter()).subscribe({
-        next: (resp: GroupedName[]) => this.searching = false
-      });
-    }, 1000);
+    this.searchValue = value;
+    this._nameService.updateFilters({...this.filter(), coincidence: value});
+    this.setCounter(250);
   }
 
   onGetNameInfoByName(name: string): void {
