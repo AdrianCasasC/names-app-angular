@@ -17,6 +17,8 @@ import { bookGifBase64 } from '../../constants/base64.constant';
 import { NgClass } from '@angular/common';
 import { PunctuationService } from '../../services/punctuation.service';
 import { ModalComponent } from '../../components/modal/modal.component';
+import { HeaderComponent } from "../../components/header/header.component";
+import { ListComponent } from "../../components/list/list.component";
 
 @Component({
   selector: 'app-home-page',
@@ -28,12 +30,12 @@ import { ModalComponent } from '../../components/modal/modal.component';
     NzIconModule,
     NzSelectModule,
     NzSpinModule,
-    NzPaginationModule,
-    NgClass,
     ModalComponent,
     ReactiveFormsModule,
-    NzDatePickerModule
-  ],
+    NzDatePickerModule,
+    HeaderComponent,
+    ListComponent
+],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })
@@ -114,29 +116,6 @@ export class HomePageComponent implements OnInit {
   onGetNameInfoByName(name: string): void {
     this._nameService.getNameInfoByByName(name).subscribe({
       next: (resp) => console.log("Respuesta get by name: ", resp)
-    })
-  }
-
-  onPageIndexChange(newPage: number): void {
-    this._nameService.updateFilters({...this.filter(), page: newPage});
-    this.getAllNames();
-  }
-
-  onPageSizeChanges(newPageSize: number): void {
-    this._nameService.updateFilters({...this.filter(), pageSize: newPageSize});
-    this.getAllNames();
-  }
-
-  onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean, name: string) {
-    const body = {
-      [identity === 'Adri' ? "checkedByAdri" : "checkedByElena"]: value,
-      name
-    } 
-    this._nameService.updateName(nameId, body).subscribe({
-      next: (resp: Name) => {
-        this._nameService.updateEditedName(resp);
-        this.getPunctuation();
-      }
     })
   }
 
