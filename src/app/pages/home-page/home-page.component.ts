@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { NameService } from '../../services/name.service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 /** NgZorro */
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
@@ -9,12 +9,14 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 import { GroupedName, Name } from '../../models/names.model';
 import { Filter } from '../../models/request.model';
 import { bookGifBase64 } from '../../constants/base64.constant';
 import { NgClass } from '@angular/common';
 import { PunctuationService } from '../../services/punctuation.service';
+import { ModalComponent } from '../../components/modal/modal.component';
 
 @Component({
   selector: 'app-home-page',
@@ -27,7 +29,10 @@ import { PunctuationService } from '../../services/punctuation.service';
     NzSelectModule,
     NzSpinModule,
     NzPaginationModule,
-    NgClass
+    NgClass,
+    ModalComponent,
+    ReactiveFormsModule,
+    NzDatePickerModule
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
@@ -36,6 +41,7 @@ export class HomePageComponent implements OnInit {
   /* Injections */
   private readonly _nameService = inject(NameService);
   private readonly _punctuationService = inject(PunctuationService);
+  private readonly _fb = inject(FormBuilder);
 
   /* Signals */
   //name = this._nameService.name;
@@ -52,6 +58,15 @@ export class HomePageComponent implements OnInit {
   searchValue: string = '';
   counter: number = 1000;
   interval: any;
+  openAddModal = false;
+  newDate: Date | null = null;
+  nameForm: FormGroup = this._fb.group({
+    name: ['', Validators.required],
+    meaning: [''],
+    details: [''],
+    date: [''],
+    
+  })
 
   private getAllNames(): void {
     this._nameService.getAllNames(this.filter()).subscribe();
@@ -80,9 +95,13 @@ export class HomePageComponent implements OnInit {
     this._punctuationService.getPunctuation().subscribe();
   }
 
-  ngOnInit(): void {
+  private init(): void {
     this.getAllNames();
     this.getPunctuation();
+  }
+
+  ngOnInit(): void {
+    this.init();
   }
 
   onSearchName(event: Event): void {
@@ -120,4 +139,38 @@ export class HomePageComponent implements OnInit {
       }
     })
   }
+
+  onSetAddModalState(state: 'open' | 'close'): void {
+    this.openAddModal = state === 'open';
+  }
+
+  onReloadNames(): void {
+    this.init();
+  }
+
+  onSubmitAddForm(): void {
+    if (this.nameForm.invalid) return;
+    const {name, meaning, details, date} = this.nameForm.value
+    const newName: Name = {
+      name,
+      meaning,
+      details,
+      date,
+      checkedByAdri: false,
+      checkedByElena: false,
+    }
+    this._nameService.addName(newName).subscribe({
+      next: () => {
+        this.nameForm.reset();
+        this.init();
+      }
+    });
+  }
+
+  onDateChange(selectedDate: Date): void {
+    this.nameForm.patchValue({
+      date: selectedDate
+    })
+  }
+
 }

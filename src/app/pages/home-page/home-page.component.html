@@ -17,7 +17,7 @@
       <p class="text-lg text-muted-foreground mb-6 text-center">
         ¿Eres capaz de completarlos todos 😜?
       </p>
-      <div class="flex gap-4 mb-6">
+      <div class="flex gap-4 mb-6 relative">
         <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -26,8 +26,8 @@
               d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
             </path>
             <circle cx="12" cy="8" r="6"></circle>
-          </svg><span class="font-semibold text-[#319ebf]">Adrian:</span><span
-            class="font-bold text-foreground">{{ punctuationAdri()?.total}}</span></div>
+          </svg><span class="font-semibold text-[#319ebf]">Adrian:</span><span class="font-bold text-foreground">{{
+            punctuationAdri()?.total}}</span></div>
         <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -36,9 +36,19 @@
               d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
             </path>
             <circle cx="12" cy="8" r="6"></circle>
-          </svg><span class="font-semibold text-[#58c990]">Elena:</span><span class="font-bold text-foreground">{{ punctuationElena()?.total }}</span>
+          </svg><span class="font-semibold text-[#58c990]">Elena:</span><span class="font-bold text-foreground">{{
+            punctuationElena()?.total }}</span>
+        </div>
+        
+        <div (click)="onReloadNames()" class="flex my-auto justify-center rounded-full bg-card border-primary border-[1px] cursor-pointer absolute right-0 h-full w-11">
+          <nz-icon nz-icon nzType="reload" nzTheme="outline" class="text-primary" />
         </div>
       </div>
+      <div (click)="onSetAddModalState('open')"
+          class="flex items-center justify-center px-4 py-2 rounded-lg cursor-pointer text-muted-foreground mb-6 bg-primary text-white">
+          <nz-icon nz-icon nzType="plus-circle" nzTheme="outline" class="text-white mr-3 text-xl" />
+          <span class="text-[16px]">Añadir nombre</span>
+        </div>
       <div class="relative">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -71,51 +81,50 @@
         <h2 class="text-2xl font-bold text-primary sticky top-0 bg-background/80 backdrop-blur-sm py-2 z-10">{{
           goupedName.letter }}</h2>
         @for (name of goupedName.list; track $index) {
-        <nz-collapse
-        class="transition-[background-color] duration-300"
-        [class.bg-[#319ebf]]="name.checkedByAdri"
-        [class.text-white]="name.checkedByAdri || name.checkedByElena"
-        [class.bg-[#58c990]]="name.checkedByElena"
-        [ngClass]="{
+        <nz-collapse class="transition-[background-color] duration-300" [class.bg-[#319ebf]]="name.checkedByAdri"
+          [class.text-white]="name.checkedByAdri || name.checkedByElena" [class.bg-[#58c990]]="name.checkedByElena"
+          [ngClass]="{
           'bg-gradient-to-r from-[#319ebf] to-[#58c990]': name.checkedByAdri && name.checkedByElena
-        }"
-        [nzExpandIconPosition]="'end'">
+        }" [nzExpandIconPosition]="'end'">
           <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
             @if (isLoadingName()) {
-              <img [src]="book64path" />
+            <img [src]="book64path" />
             } @else {
-              <div class="relative">
-                
-                <p>Fecha: {{ name.date }}</p>
-                <p>Significado: {{ name.meaning }}</p>
-                <p>Detalles: {{ name.details }}</p>
-                <div class="pt-3 border-t border-border"><span
-                    class="text-sm font-medium text-muted-foreground mb-3 block">¿Quién conoce a alguien con este nombre?</span>
-                  <div class="flex gap-6">
-                    <div class="flex items-center space-x-2">
-                      <label
-                        class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
-                        for="adrian-1" style="color: hsl(var(--adrian));">
-                        Adrian
-                      </label>
-                      <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri" (ngModelChange)="onSwitchChange(name._id, 'Adri', $event, name.name)"></nz-switch>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                      <label
-                        class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
-                        for="elena-1" style="color: hsl(var(--elena));">
-                        Elena
-                      </label>
-                      <nz-switch id="elena-1" [ngModel]="name.checkedByElena" (ngModelChange)="onSwitchChange(name._id, 'Elena', $event, name.name)"></nz-switch>
-                    </div>
+            <div class="relative">
+
+              <p>Fecha: {{ name.date }}</p>
+              <p>Significado: {{ name.meaning }}</p>
+              <p>Detalles: {{ name.details }}</p>
+              <div class="pt-3 border-t border-border"><span
+                  class="text-sm font-medium text-muted-foreground mb-3 block">¿Quién conoce a alguien con este
+                  nombre?</span>
+                <div class="flex gap-6">
+                  <div class="flex items-center space-x-2">
+                    <label
+                      class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                      for="adrian-1" style="color: hsl(var(--adrian));">
+                      Adrian
+                    </label>
+                    <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri"
+                      (ngModelChange)="onSwitchChange(name._id || '', 'Adri', $event, name.name)"></nz-switch>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <label
+                      class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                      for="elena-1" style="color: hsl(var(--elena));">
+                      Elena
+                    </label>
+                    <nz-switch id="elena-1" [ngModel]="name.checkedByElena"
+                      (ngModelChange)="onSwitchChange(name._id || '', 'Elena', $event, name.name)"></nz-switch>
                   </div>
                 </div>
-                @if (isLoadingMap().get(name._id)) {
-                  <div class="absolute left-0 top-0 w-full h-full bg-white/70 flex justify-center items-center">
-                    <img class="h-full" [src]="book64path" />
-                  </div>
-                }
               </div>
+              @if (isLoadingMap().get(name._id || '')) {
+              <div class="absolute left-0 top-0 w-full h-full bg-white/70 flex justify-center items-center">
+                <img class="h-full" [src]="book64path" />
+              </div>
+              }
+            </div>
             }
           </nz-collapse-panel>
         </nz-collapse>
@@ -135,3 +144,65 @@
     }
   </main>
 </div>
+
+<ng-template #nameModal>
+  <form [formGroup]="nameForm" (ngSubmit)="onSubmitAddForm()"
+    class="w-[80vw] fixed left-[50%] top-[50%] z-50 grid translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg">
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 id="radix-:r1:" class="text-lg font-semibold leading-none tracking-tight">Añadir nuevo nombre ✏️</h2>
+    </div>
+    <div class="space-y-4 mt-4">
+      <div class="space-y-2 relative"><label
+          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          for="name">Nombre <span class="text-primary">*</span></label><input
+          formControlName="name"
+          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          id="name" placeholder="Introduce el nombre" value="">
+          @if (nameForm.get('name')?.hasError('required') && nameForm.get('name')?.dirty) {
+            <small class="text-red-400 absolute -bottom-[18px] left-0">El nombre es obligatorio</small>
+          }
+        </div>
+          
+      <div class="space-y-2"><label
+          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          for="meaning">Significado</label><input
+          formControlName="meaning"
+          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          id="meaning" placeholder="Introduce el significado" value=""></div>
+      <div class="space-y-2"><label
+          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          for="meaning">Detalles</label><input
+          formControlName="details"
+          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          id="meaning" placeholder="Introduce los detalles" value=""></div>
+      <label
+        class="block text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        for="meaning">Fecha</label>
+      <nz-date-picker formControlName="date"  nzPlaceHolder="Seleccionar"></nz-date-picker>
+      <button
+        type="submit"
+        [class.opacity-50]="!nameForm.valid"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+        Añadir Nombre
+      </button>
+    </div>
+    <button
+      (click)="onSetAddModalState('close')"
+      type="button"
+      class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"><svg
+        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg><span class="sr-only">Close</span>
+    </button>
+
+  </form>
+</ng-template>
+
+<app-modal
+[show]="openAddModal"
+
+  [ignoreElementsById]="['cdk-overlay-0']"
+   [showCloseIcon]="true" [content]="nameModal"
+  (closeModal)="onSetAddModalState('close')"></app-modal>
