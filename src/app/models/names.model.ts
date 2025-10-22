@@ -1,5 +1,5 @@
 export interface Name {
-    _id: string;
+    _id?: string;
     name: string;
     date: Date;
     checkedByAdri: boolean;

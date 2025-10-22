@@ -5,8 +5,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
+import { provideNzI18n, es_ES } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import es from '@angular/common/locales/es';
 
-import { UserOutline, HomeOutline, LoadingOutline } from '@ant-design/icons-angular/icons';
+import { UserOutline, HomeOutline, LoadingOutline, PlusCircleOutline, ReloadOutline } from '@ant-design/icons-angular/icons';
+
+registerLocaleData(es);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch()),
     provideAnimations(),
-    provideNzIcons([UserOutline, HomeOutline, LoadingOutline])
+    provideNzI18n(es_ES),
+    provideNzIcons([UserOutline, HomeOutline, LoadingOutline, PlusCircleOutline, ReloadOutline])
   ]
 };

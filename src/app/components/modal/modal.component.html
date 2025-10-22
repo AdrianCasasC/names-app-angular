@@ -1,0 +1,8 @@
+<div class="wrapper hidden fixed bg-black/50 top-0 left-0 w-screen h-screen centered backdrop-blur-sm z-[999]" [class.show]="show()">
+    <section (clickOutside)="onCloseModal()" [clickOutsideIgnoreByClass]="ignoreElementsByClass()" [clickOutsideIgnoreById]="ignoreElementsById()" class="info-modal relative" [class.show]="show()">
+        <span (click)="onCloseModal()" class="w-[24px] h-[24px] absolute top-3 right-3 cursor-pointer">
+          <img src="../../../assets/svgs/close.svg" alt="close-cross" class="w-full h-full" />
+        </span>
+        <ng-container [ngTemplateOutlet]="content()"></ng-container>
+    </section>
+</div>
