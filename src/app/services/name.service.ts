@@ -114,4 +114,8 @@ export class NameService {
       )
   )
   }
+
+  deleteById(id: string): Observable<void> {
+    return this._http.delete<void>(`${this.apiUrl}/${id}`)
+  }
 }

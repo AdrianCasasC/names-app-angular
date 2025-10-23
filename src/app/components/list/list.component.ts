@@ -34,6 +34,11 @@ export class ListComponent {
 
   /* variables */
   book64path: string = bookGifBase64;
+  private startX = 0;
+  private currentX = 0;
+  private isDragging = false;
+  private threshold = 80;
+  transform = 'translateX(0)'
 
   private getPunctuation(): void {
     this._punctuationService.getPunctuation().subscribe();
@@ -41,6 +46,10 @@ export class ListComponent {
 
   private getAllNames(): void {
     this._nameService.getAllNames(this.filter()).subscribe();
+  }
+
+  private getClientX(event: TouchEvent | MouseEvent): number {
+    return event instanceof TouchEvent ? event.touches[0].clientX : event.clientX;
   }
 
   onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean, name: string) {
@@ -64,6 +73,40 @@ export class ListComponent {
   onPageSizeChanges(newPageSize: number): void {
     this._nameService.updateFilters({...this.filter(), pageSize: newPageSize});
     this.getAllNames();
+  }
+
+  onTouchStart(event: TouchEvent | MouseEvent, index: number) {
+    this.isDragging = true;
+    this.startX = this.getClientX(event);
+  }
+
+  onTouchMove(event: TouchEvent | MouseEvent, index: number) {
+    if (!this.isDragging) return;
+    this.currentX = this.getClientX(event);
+    const diffX = this.currentX - this.startX;
+
+    // Only allow left swipe (negative X)
+    if (diffX < 0) {
+      this.transform = `translateX(${diffX}px)`;
+    }
+  }
+
+  onTouchEnd(index: number) {
+    this.isDragging = false;
+    const transformValue = this.transform;
+    const distance = parseInt(transformValue.replace(/translateX\((.*)px\)/, '$1'), 10);
+
+    if (distance < -this.threshold) {
+      // Keep bin revealed
+      this.transform = 'translateX(-80px)';
+    } else {
+      // Return to original position
+      this.transform = 'translateX(0)';
+    }
+  }
+
+  onDeleteName(id: string): void {
+    this._nameService.deleteById(id).subscribe();
   }
 
 }
