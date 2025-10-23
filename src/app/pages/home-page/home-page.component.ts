@@ -141,6 +141,7 @@ export class HomePageComponent implements OnInit {
     this._nameService.addName(newName).subscribe({
       next: () => {
         this.nameForm.reset();
+        this.onSetAddModalState('close');
         this.init();
       }
     });
