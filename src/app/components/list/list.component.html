@@ -10,59 +10,69 @@
   @if (groupLoading()) {
   <img class="mx-auto" [src]="book64path" alt="boo_loader" />
   } @else {
-  @for (goupedName of groupedNames(); track $index) {
+  @for (goupedName of groupedNames(); let i = $index; track i) {
   <div class="space-y-8">
     <div class="space-y-3">
       <h2 class="text-2xl font-bold text-primary sticky top-0 bg-background/80 backdrop-blur-sm py-2 z-10">{{
         goupedName.letter }}</h2>
-      @for (name of goupedName.list; track $index) {
-      <nz-collapse class="transition-[background-color] duration-300" [class.bg-[#319ebf]]="name.checkedByAdri"
-        [class.text-white]="name.checkedByAdri || name.checkedByElena" [class.bg-[#58c990]]="name.checkedByElena"
-        [ngClass]="{
+      @for (name of goupedName.list; let j = $index; track j) {
+      <div class="item" >
+        <nz-collapse
+          [style.transform]="'translateX(' + name.transform + 'px)'"
+          (touchstart)="onTouchStart($event, i)" (touchmove)="onTouchMove($event, i, j)"
+          (touchend)="onTouchEnd(i,j)" (mousedown)="onTouchStart($event, i)" (mousemove)="onTouchMove($event, i, j)"
+          (mouseup)="onTouchEnd(i,j)" (mouseleave)="onTouchEnd(i,j)" class="transition-[background-color] duration-300 z-10"
+          [class.bg-[#319ebf]]="name.checkedByAdri" [class.text-white]="name.checkedByAdri || name.checkedByElena"
+          [class.bg-[#58c990]]="name.checkedByElena" [ngClass]="{
         'bg-gradient-to-r from-[#319ebf] to-[#58c990]': name.checkedByAdri && name.checkedByElena
-      }" [nzExpandIconPosition]="'end'">
-        <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
-          @if (isLoadingName()) {
-          <img [src]="book64path" />
-          } @else {
-          <div class="relative">
+      }" [nzExpandIconPosition]="'end'"
+      >
+          <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
+            @if (isLoadingName()) {
+            <img [src]="book64path" />
+            } @else {
+            <div class="relative">
 
-            <p>Fecha: {{ name.date }}</p>
-            <p>Significado: {{ name.meaning }}</p>
-            <p>Detalles: {{ name.details }}</p>
-            <div class="pt-3 border-t border-border"><span
-                class="text-sm font-medium text-muted-foreground mb-3 block">¿Quién conoce a alguien con este
-                nombre?</span>
-              <div class="flex gap-6">
-                <div class="flex items-center space-x-2">
-                  <label
-                    class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
-                    for="adrian-1" style="color: hsl(var(--adrian));">
-                    Adrian
-                  </label>
-                  <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri"
-                    (ngModelChange)="onSwitchChange(name._id || '', 'Adri', $event, name.name)"></nz-switch>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <label
-                    class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
-                    for="elena-1" style="color: hsl(var(--elena));">
-                    Elena
-                  </label>
-                  <nz-switch id="elena-1" [ngModel]="name.checkedByElena"
-                    (ngModelChange)="onSwitchChange(name._id || '', 'Elena', $event, name.name)"></nz-switch>
+              <p>Fecha: {{ name.date }}</p>
+              <p>Significado: {{ name.meaning }}</p>
+              <p>Detalles: {{ name.details }}</p>
+              <div class="pt-3 border-t border-border"><span
+                  class="text-sm font-medium text-muted-foreground mb-3 block">¿Quién conoce a alguien con este
+                  nombre?</span>
+                <div class="flex gap-6">
+                  <div class="flex items-center space-x-2">
+                    <label
+                      class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                      for="adrian-1" style="color: hsl(var(--adrian));">
+                      Adrian
+                    </label>
+                    <nz-switch id="adrian-1" class="adri" [ngModel]="name.checkedByAdri"
+                      (ngModelChange)="onSwitchChange(name._id || '', 'Adri', $event, name.name)"></nz-switch>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <label
+                      class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium cursor-pointer"
+                      for="elena-1" style="color: hsl(var(--elena));">
+                      Elena
+                    </label>
+                    <nz-switch id="elena-1" [ngModel]="name.checkedByElena"
+                      (ngModelChange)="onSwitchChange(name._id || '', 'Elena', $event, name.name)"></nz-switch>
+                  </div>
                 </div>
               </div>
-            </div>
-            @if (isLoadingMap().get(name._id || '')) {
-            <div class="absolute left-0 top-0 w-full h-full bg-white/70 flex justify-center items-center">
-              <img class="h-full" [src]="book64path" />
+              @if (isLoadingMap().get(name._id || '')) {
+              <div class="absolute left-0 top-0 w-full h-full bg-white/70 flex justify-center items-center">
+                <img class="h-full" [src]="book64path" />
+              </div>
+              }
             </div>
             }
-          </div>
-          }
-        </nz-collapse-panel>
-      </nz-collapse>
+          </nz-collapse-panel>
+        </nz-collapse>
+        <div class="delete-btn" [style.width]="name.transform!* -1  + 'px'" (click)="onDeleteName(name?._id || '')">
+          <nz-icon nz-icon nzType="delete" nzTheme="outline" />
+        </div>
+      </div>
       }
     </div>
   </div>

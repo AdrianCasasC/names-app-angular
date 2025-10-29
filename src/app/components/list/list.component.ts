@@ -8,6 +8,8 @@ import { Name } from '../../models/names.model';
 import { PunctuationService } from '../../services/punctuation.service';
 import { FormsModule } from '@angular/forms';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-list',
@@ -17,7 +19,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     NzSwitchModule,
     NzPaginationModule,
     NgClass,
-    FormsModule
+    FormsModule,
+    NzIconModule
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
@@ -25,6 +28,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 export class ListComponent {
   private readonly _nameService = inject(NameService);
   private readonly _punctuationService = inject(PunctuationService);
+  private readonly _notificationService = inject(NotificationService);
   
   filter = this._nameService.filter;
   groupLoading = this._nameService.groupLoading;
@@ -34,6 +38,10 @@ export class ListComponent {
 
   /* variables */
   book64path: string = bookGifBase64;
+  private startX = 0;
+  private currentX = 0;
+  private isDragging = false;
+  private threshold = 80;
 
   private getPunctuation(): void {
     this._punctuationService.getPunctuation().subscribe();
@@ -41,6 +49,10 @@ export class ListComponent {
 
   private getAllNames(): void {
     this._nameService.getAllNames(this.filter()).subscribe();
+  }
+
+  private getClientX(event: TouchEvent | MouseEvent): number {
+    return event instanceof TouchEvent ? event.touches[0].clientX : event.clientX;
   }
 
   onSwitchChange(nameId: string, identity: 'Adri' | 'Elena', value: boolean, name: string) {
@@ -64,6 +76,40 @@ export class ListComponent {
   onPageSizeChanges(newPageSize: number): void {
     this._nameService.updateFilters({...this.filter(), pageSize: newPageSize});
     this.getAllNames();
+  }
+
+  onTouchStart(event: TouchEvent | MouseEvent, index: number) {
+    this.isDragging = true;
+    this.startX = this.getClientX(event);
+  }
+
+  onTouchMove(event: TouchEvent | MouseEvent, i: number, j: number) {
+    if (!this.isDragging) return;
+    this.currentX = this.getClientX(event);
+    const diffX = this.currentX - this.startX;
+
+    // Only allow left swipe (negative X)
+    if (diffX < 0) {
+      this._nameService.updateTransformNamePosition(diffX, i, j);
+    }
+  }
+
+  onTouchEnd(i: number, j: number) {
+    this.isDragging = false;
+    const distance = this.groupedNames()[i].list[j].transform || 0;
+    //const distance = parseInt(transformValue.replace(/translateX\((.*)px\)/, '$1'), 10);
+
+    if (distance < -this.threshold) {
+      // Keep bin revealed
+      this._nameService.updateTransformNamePosition(-80, i, j);
+    } else {
+      // Return to original position
+      this._nameService.updateTransformNamePosition(0, i, j);
+    }
+  }
+
+  onDeleteName(id: string): void {
+    this._nameService.deleteById(id).subscribe();
   }
 
 }

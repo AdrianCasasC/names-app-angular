@@ -5,7 +5,7 @@ import { computed, Injectable, signal } from '@angular/core';
 })
 export class NotificationService {
   private _notification = signal<Notification | null>(null);
-  notification = computed(() => this._notification());
+  notification = this._notification.asReadonly();
 
   closeNotification(): void {
     this._notification.set(null);

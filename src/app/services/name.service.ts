@@ -97,6 +97,13 @@ export class NameService {
     })
   }
 
+  updateTransformNamePosition(position: number, groupNameIndex: number, listIndex: number): void {
+    this._groupedNames.update(prev => {
+      prev[groupNameIndex].list[listIndex].transform = position
+      return prev;
+    })
+  }
+
   addName(newName: Name): Observable<Name> {
     const mapKey = 'post_name';
     this._isLoadingMap.update(prev => prev.set(mapKey, true));
@@ -113,5 +120,19 @@ export class NameService {
       })
       )
   )
+  }
+
+  deleteById(id: string): Observable<void> {
+    return this._http.delete<void>(`${this.apiUrl}/names/${id}`)
+    .pipe(
+      tap(() => {
+        this.getAllNames(this._filter()).subscribe();
+        this._notificationService.createNotification({
+          icon: 'success',
+          type: 'success',
+          message: '¡Nombre  Eliminado! ✅'
+        })
+      })
+    )
   }
 }

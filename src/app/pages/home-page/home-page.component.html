@@ -3,7 +3,42 @@
     <div class="container mx-auto px-4 py-8 max-w-4xl">
       <app-header></app-header>
       <div class="flex gap-4 mb-6 relative">
-        <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
+        <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card relative">
+          @if ((punctuationAdri()?.total || 0) > (punctuationElena()?.total || 0)) {
+            <svg
+              class="absolute -top-9 w-9 left-1/2 -translate-x-1/2"
+              data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+              <path
+                d="M89.84 25.134a2.413 2.413 0 1 1 2.412-2.413 2.415 2.415 0 0 1-2.412 2.413zM89.84 34.139a2.413 2.413 0 1 1 2.412-2.413 2.415 2.415 0 0 1-2.412 2.413zM85.337 29.636a2.413 2.413 0 1 1 2.413-2.413 2.415 2.415 0 0 1-2.413 2.413zM94.342 29.636a2.413 2.413 0 1 1 2.412-2.413 2.415 2.415 0 0 1-2.412 2.413zM22 103.14a2.413 2.413 0 1 1 2.413-2.413A2.416 2.416 0 0 1 22 103.14zM22 112.145a2.413 2.413 0 1 1 2.413-2.413A2.416 2.416 0 0 1 22 112.145zM17.5 107.642a2.413 2.413 0 1 1 2.413-2.413 2.416 2.416 0 0 1-2.413 2.413zM26.5 107.642a2.413 2.413 0 1 1 2.413-2.413 2.416 2.416 0 0 1-2.413 2.413z"
+                style="fill:#fd852b" />
+              <path transform="rotate(-44.999 41.052 18.76)" style="fill:#fd748c"
+                d="M37.781 15.488h6.542v6.542h-6.542z" />
+              <path transform="rotate(-45 104.23 109.241)" style="fill:#fd748c" d="M100.96 105.971h6.542v6.542h-6.542z" />
+              <ellipse cx="64" cy="67.091" rx="39.322" ry="16.365" style="fill:#fc6928" />
+              <path
+                d="m110.684 44.187-8.661 39.269-1.638 7.444c0 3.821-16.292 6.91-36.385 6.91s-36.385-3.09-36.385-6.91l-1.637-7.446-8.662-39.267 30.206 18.538L64 36.628l16.478 26.1z"
+                style="fill:#f9d12f" />
+              <path transform="rotate(-45 64 69.872)" style="fill:#2ec3fc" d="M60.631 66.504h6.737v6.737h-6.737z" />
+              <path
+                d="m102.023 83.456-1.638 7.444c0 3.821-16.292 6.91-36.385 6.91s-36.385-3.09-36.385-6.91l-1.637-7.446c7.043 2.639 21.431 4.431 38.022 4.431s30.978-1.792 38.023-4.429z"
+                style="fill:#fd852b" />
+              <path d="M96.234 53.055 86.115 96.389c8.673-1.262 14.27-3.249 14.27-5.487l1.637-7.446 8.661-39.269z"
+                style="fill:#f8b62b" />
+              <circle cx="110.684" cy="44.553" r="7.816" style="fill:#fd852b" />
+              <path
+                d="M86.115 96.389q.783-.114 1.531-.236l.13-.021q.7-.114 1.359-.235l.139-.025q.695-.127 1.354-.261l.031-.006a50.475 50.475 0 0 0 3.729-.9l.157-.046q.451-.132.871-.268l.214-.071q.383-.128.737-.258l.213-.079c.237-.09.462-.182.678-.274.052-.022.108-.044.158-.067a11.12 11.12 0 0 0 1.378-.711c.042-.026.078-.053.119-.079.143-.093.279-.186.4-.281.053-.041.1-.082.149-.123a3.504 3.504 0 0 0 .401-.385 2.6 2.6 0 0 0 .191-.244c.032-.046.066-.093.093-.139a1.77 1.77 0 0 0 .123-.263c.016-.041.037-.082.049-.123a1.387 1.387 0 0 0 .061-.389l1.637-7.446a66.129 66.129 0 0 1-13.58 2.966zM103.946 48.5a7.8 7.8 0 0 0 14.539-3.644 7.8 7.8 0 0 0-14.539 3.644z"
+                style="fill:#fc6928" />
+              <path style="fill:#f8b62b" d="M80.478 62.725 71.816 68 64 36.738l16.478 25.987z" />
+              <circle cx="64" cy="36.738" r="7.816" style="fill:#fc6928" />
+              <path d="M62 29.19a7.806 7.806 0 0 0 0 15.1 7.806 7.806 0 0 0 0-15.1z" style="fill:#fd852b" />
+              <path style="fill:#f8b62b" d="m47.522 62.725-4.71 7.148-25.496-25.686 30.206 18.538z" />
+              <circle cx="17.316" cy="44.553" r="7.816" style="fill:#fc6928" />
+              <path d="M13.464 37.758a7.806 7.806 0 0 0 3.454 14.592 7.806 7.806 0 0 0-3.454-14.592z"
+                style="fill:#fd852b" />
+              <path style="fill:#1ba4fc" d="M64 65.109v4.764h4.764L64 65.109zM59.236 69.873H64v4.763l-4.764-4.763z" />
+            </svg>
+          }
+          <svg
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="lucide lucide-award h-5 w-5 text-[#319ebf]">
@@ -13,8 +48,42 @@
             <circle cx="12" cy="8" r="6"></circle>
           </svg><span class="font-semibold text-[#319ebf]">Adrian:</span><span class="font-bold text-foreground">{{
             punctuationAdri()?.total}}</span></div>
-        <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card"><svg
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        <div class="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card relative">
+          @if ((punctuationElena()?.total || 0) > (punctuationAdri()?.total || 0)) {
+            <svg
+              class="absolute -top-9 w-9 left-1/2 -translate-x-1/2"
+              data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+              <path
+                d="M89.84 25.134a2.413 2.413 0 1 1 2.412-2.413 2.415 2.415 0 0 1-2.412 2.413zM89.84 34.139a2.413 2.413 0 1 1 2.412-2.413 2.415 2.415 0 0 1-2.412 2.413zM85.337 29.636a2.413 2.413 0 1 1 2.413-2.413 2.415 2.415 0 0 1-2.413 2.413zM94.342 29.636a2.413 2.413 0 1 1 2.412-2.413 2.415 2.415 0 0 1-2.412 2.413zM22 103.14a2.413 2.413 0 1 1 2.413-2.413A2.416 2.416 0 0 1 22 103.14zM22 112.145a2.413 2.413 0 1 1 2.413-2.413A2.416 2.416 0 0 1 22 112.145zM17.5 107.642a2.413 2.413 0 1 1 2.413-2.413 2.416 2.416 0 0 1-2.413 2.413zM26.5 107.642a2.413 2.413 0 1 1 2.413-2.413 2.416 2.416 0 0 1-2.413 2.413z"
+                style="fill:#fd852b" />
+              <path transform="rotate(-44.999 41.052 18.76)" style="fill:#fd748c"
+                d="M37.781 15.488h6.542v6.542h-6.542z" />
+              <path transform="rotate(-45 104.23 109.241)" style="fill:#fd748c" d="M100.96 105.971h6.542v6.542h-6.542z" />
+              <ellipse cx="64" cy="67.091" rx="39.322" ry="16.365" style="fill:#fc6928" />
+              <path
+                d="m110.684 44.187-8.661 39.269-1.638 7.444c0 3.821-16.292 6.91-36.385 6.91s-36.385-3.09-36.385-6.91l-1.637-7.446-8.662-39.267 30.206 18.538L64 36.628l16.478 26.1z"
+                style="fill:#f9d12f" />
+              <path transform="rotate(-45 64 69.872)" style="fill:#2ec3fc" d="M60.631 66.504h6.737v6.737h-6.737z" />
+              <path
+                d="m102.023 83.456-1.638 7.444c0 3.821-16.292 6.91-36.385 6.91s-36.385-3.09-36.385-6.91l-1.637-7.446c7.043 2.639 21.431 4.431 38.022 4.431s30.978-1.792 38.023-4.429z"
+                style="fill:#fd852b" />
+              <path d="M96.234 53.055 86.115 96.389c8.673-1.262 14.27-3.249 14.27-5.487l1.637-7.446 8.661-39.269z"
+                style="fill:#f8b62b" />
+              <circle cx="110.684" cy="44.553" r="7.816" style="fill:#fd852b" />
+              <path
+                d="M86.115 96.389q.783-.114 1.531-.236l.13-.021q.7-.114 1.359-.235l.139-.025q.695-.127 1.354-.261l.031-.006a50.475 50.475 0 0 0 3.729-.9l.157-.046q.451-.132.871-.268l.214-.071q.383-.128.737-.258l.213-.079c.237-.09.462-.182.678-.274.052-.022.108-.044.158-.067a11.12 11.12 0 0 0 1.378-.711c.042-.026.078-.053.119-.079.143-.093.279-.186.4-.281.053-.041.1-.082.149-.123a3.504 3.504 0 0 0 .401-.385 2.6 2.6 0 0 0 .191-.244c.032-.046.066-.093.093-.139a1.77 1.77 0 0 0 .123-.263c.016-.041.037-.082.049-.123a1.387 1.387 0 0 0 .061-.389l1.637-7.446a66.129 66.129 0 0 1-13.58 2.966zM103.946 48.5a7.8 7.8 0 0 0 14.539-3.644 7.8 7.8 0 0 0-14.539 3.644z"
+                style="fill:#fc6928" />
+              <path style="fill:#f8b62b" d="M80.478 62.725 71.816 68 64 36.738l16.478 25.987z" />
+              <circle cx="64" cy="36.738" r="7.816" style="fill:#fc6928" />
+              <path d="M62 29.19a7.806 7.806 0 0 0 0 15.1 7.806 7.806 0 0 0 0-15.1z" style="fill:#fd852b" />
+              <path style="fill:#f8b62b" d="m47.522 62.725-4.71 7.148-25.496-25.686 30.206 18.538z" />
+              <circle cx="17.316" cy="44.553" r="7.816" style="fill:#fc6928" />
+              <path d="M13.464 37.758a7.806 7.806 0 0 0 3.454 14.592 7.806 7.806 0 0 0-3.454-14.592z"
+                style="fill:#fd852b" />
+              <path style="fill:#1ba4fc" d="M64 65.109v4.764h4.764L64 65.109zM59.236 69.873H64v4.763l-4.764-4.763z" />
+            </svg>
+          }
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="lucide lucide-award h-5 w-5 text-[#58c990]">
             <path
@@ -24,16 +93,17 @@
           </svg><span class="font-semibold text-[#58c990]">Elena:</span><span class="font-bold text-foreground">{{
             punctuationElena()?.total }}</span>
         </div>
-        
-        <div (click)="onReloadNames()" class="flex my-auto justify-center rounded-full bg-card border-primary border-[1px] cursor-pointer absolute right-0 h-full w-11">
+
+        <div (click)="onReloadNames()"
+          class="flex my-auto justify-center rounded-full bg-card border-primary border-[1px] cursor-pointer absolute right-0 h-full w-11">
           <nz-icon nz-icon nzType="reload" nzTheme="outline" class="text-primary" />
         </div>
       </div>
       <div (click)="onSetAddModalState('open')"
-          class="flex items-center justify-center px-4 py-2 rounded-lg cursor-pointer text-muted-foreground mb-6 bg-primary text-white">
-          <nz-icon nz-icon nzType="plus-circle" nzTheme="outline" class="text-white mr-3 text-xl" />
-          <span class="text-[16px]">Añadir nombre</span>
-        </div>
+        class="flex items-center justify-center px-4 py-2 rounded-lg cursor-pointer text-muted-foreground mb-6 bg-primary text-white">
+        <nz-icon nz-icon nzType="plus-circle" nzTheme="outline" class="text-white mr-3 text-xl" />
+        <span class="text-[16px]">Añadir nombre</span>
+      </div>
       <div class="relative">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -60,41 +130,33 @@
     <div class="space-y-4 mt-4">
       <div class="space-y-2 relative"><label
           class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          for="name">Nombre <span class="text-primary">*</span></label><input
-          formControlName="name"
+          for="name">Nombre <span class="text-primary">*</span></label><input formControlName="name"
           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
           id="name" placeholder="Introduce el nombre" value="">
-          @if (nameForm.get('name')?.hasError('required') && nameForm.get('name')?.dirty) {
-            <small class="text-red-400 absolute -bottom-[20px] left-0">El nombre es obligatorio</small>
-          }
-        </div>
-          
+        @if (nameForm.get('name')?.hasError('required') && nameForm.get('name')?.dirty) {
+        <small class="text-red-400 absolute -bottom-[20px] left-0">El nombre es obligatorio</small>
+        }
+      </div>
+
       <div class="space-y-2"><label
           class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          for="meaning">Significado</label><input
-          formControlName="meaning"
+          for="meaning">Significado</label><input formControlName="meaning"
           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
           id="meaning" placeholder="Introduce el significado" value=""></div>
       <div class="space-y-2"><label
           class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          for="meaning">Detalles</label><input
-          formControlName="details"
+          for="meaning">Detalles</label><input formControlName="details"
           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
           id="meaning" placeholder="Introduce los detalles" value=""></div>
-      <label
-        class="block text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      <label class="block text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         for="meaning">Fecha</label>
-      <nz-date-picker formControlName="date"  nzPlaceHolder="Seleccionar"></nz-date-picker>
-      <button
-        type="submit"
-        [class.opacity-50]="!nameForm.valid"
+      <nz-date-picker formControlName="date" nzPlaceHolder="Seleccionar"></nz-date-picker>
+      <button type="submit" [class.opacity-50]="!nameForm.valid"
         class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
         Añadir Nombre
       </button>
     </div>
-    <button
-      (click)="onSetAddModalState('close')"
-      type="button"
+    <button (click)="onSetAddModalState('close')" type="button"
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"><svg
         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
@@ -106,9 +168,5 @@
   </form>
 </ng-template>
 
-<app-modal
-[show]="openAddModal"
-
-  [ignoreElementsById]="['cdk-overlay-0']"
-   [showCloseIcon]="true" [content]="nameModal"
+<app-modal [show]="openAddModal" [ignoreElementsById]="['cdk-overlay-0']" [showCloseIcon]="true" [content]="nameModal"
   (closeModal)="onSetAddModalState('close')"></app-modal>
