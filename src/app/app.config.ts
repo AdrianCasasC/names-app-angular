@@ -9,7 +9,7 @@ import { provideNzI18n, es_ES } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 
-import { UserOutline, HomeOutline, LoadingOutline, PlusCircleOutline, ReloadOutline } from '@ant-design/icons-angular/icons';
+import { UserOutline, HomeOutline, LoadingOutline, PlusCircleOutline, ReloadOutline, DeleteOutline, CloseOutline } from '@ant-design/icons-angular/icons';
 
 registerLocaleData(es);
 
@@ -20,6 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideAnimations(),
     provideNzI18n(es_ES),
-    provideNzIcons([UserOutline, HomeOutline, LoadingOutline, PlusCircleOutline, ReloadOutline])
+    provideNzIcons([UserOutline, HomeOutline, LoadingOutline, PlusCircleOutline, ReloadOutline, DeleteOutline, CloseOutline])
   ]
 };

@@ -8,6 +8,8 @@ import { Name } from '../../models/names.model';
 import { PunctuationService } from '../../services/punctuation.service';
 import { FormsModule } from '@angular/forms';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-list',
@@ -17,7 +19,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     NzSwitchModule,
     NzPaginationModule,
     NgClass,
-    FormsModule
+    FormsModule,
+    NzIconModule
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
@@ -25,6 +28,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 export class ListComponent {
   private readonly _nameService = inject(NameService);
   private readonly _punctuationService = inject(PunctuationService);
+  private readonly _notificationService = inject(NotificationService);
   
   filter = this._nameService.filter;
   groupLoading = this._nameService.groupLoading;
@@ -38,7 +42,6 @@ export class ListComponent {
   private currentX = 0;
   private isDragging = false;
   private threshold = 80;
-  transform = 'translateX(0)'
 
   private getPunctuation(): void {
     this._punctuationService.getPunctuation().subscribe();
@@ -80,28 +83,28 @@ export class ListComponent {
     this.startX = this.getClientX(event);
   }
 
-  onTouchMove(event: TouchEvent | MouseEvent, index: number) {
+  onTouchMove(event: TouchEvent | MouseEvent, i: number, j: number) {
     if (!this.isDragging) return;
     this.currentX = this.getClientX(event);
     const diffX = this.currentX - this.startX;
 
     // Only allow left swipe (negative X)
     if (diffX < 0) {
-      this.transform = `translateX(${diffX}px)`;
+      this._nameService.updateTransformNamePosition(diffX, i, j);
     }
   }
 
-  onTouchEnd(index: number) {
+  onTouchEnd(i: number, j: number) {
     this.isDragging = false;
-    const transformValue = this.transform;
-    const distance = parseInt(transformValue.replace(/translateX\((.*)px\)/, '$1'), 10);
+    const distance = this.groupedNames()[i].list[j].transform || 0;
+    //const distance = parseInt(transformValue.replace(/translateX\((.*)px\)/, '$1'), 10);
 
     if (distance < -this.threshold) {
       // Keep bin revealed
-      this.transform = 'translateX(-80px)';
+      this._nameService.updateTransformNamePosition(-80, i, j);
     } else {
       // Return to original position
-      this.transform = 'translateX(0)';
+      this._nameService.updateTransformNamePosition(0, i, j);
     }
   }
 

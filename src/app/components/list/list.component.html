@@ -10,20 +10,23 @@
   @if (groupLoading()) {
   <img class="mx-auto" [src]="book64path" alt="boo_loader" />
   } @else {
-  @for (goupedName of groupedNames(); track $index) {
+  @for (goupedName of groupedNames(); let i = $index; track i) {
   <div class="space-y-8">
     <div class="space-y-3">
       <h2 class="text-2xl font-bold text-primary sticky top-0 bg-background/80 backdrop-blur-sm py-2 z-10">{{
         goupedName.letter }}</h2>
-      @for (name of goupedName.list; let i = $index; track $index) {
-      <div class="item" [style.transform]="transform">
-        <nz-collapse (touchstart)="onTouchStart($event, i)" (touchmove)="onTouchMove($event, i)"
-          (touchend)="onTouchEnd(i)" (mousedown)="onTouchStart($event, i)" (mousemove)="onTouchMove($event, i)"
-          (mouseup)="onTouchEnd(i)" (mouseleave)="onTouchEnd(i)" class="transition-[background-color] duration-300"
+      @for (name of goupedName.list; let j = $index; track j) {
+      <div class="item" >
+        <nz-collapse
+          [style.transform]="'translateX(' + name.transform + 'px)'"
+          (touchstart)="onTouchStart($event, i)" (touchmove)="onTouchMove($event, i, j)"
+          (touchend)="onTouchEnd(i,j)" (mousedown)="onTouchStart($event, i)" (mousemove)="onTouchMove($event, i, j)"
+          (mouseup)="onTouchEnd(i,j)" (mouseleave)="onTouchEnd(i,j)" class="transition-[background-color] duration-300 z-10"
           [class.bg-[#319ebf]]="name.checkedByAdri" [class.text-white]="name.checkedByAdri || name.checkedByElena"
           [class.bg-[#58c990]]="name.checkedByElena" [ngClass]="{
         'bg-gradient-to-r from-[#319ebf] to-[#58c990]': name.checkedByAdri && name.checkedByElena
-      }" [nzExpandIconPosition]="'end'">
+      }" [nzExpandIconPosition]="'end'"
+      >
           <nz-collapse-panel [nzHeader]="name.name" [nzActive]="false">
             @if (isLoadingName()) {
             <img [src]="book64path" />
@@ -66,8 +69,8 @@
             }
           </nz-collapse-panel>
         </nz-collapse>
-        <div class="delete-btn" (click)="onDeleteName(name?._id || '')">
-          🗑️
+        <div class="delete-btn" [style.width]="name.transform!* -1  + 'px'" (click)="onDeleteName(name?._id || '')">
+          <nz-icon nz-icon nzType="delete" nzTheme="outline" />
         </div>
       </div>
       }
