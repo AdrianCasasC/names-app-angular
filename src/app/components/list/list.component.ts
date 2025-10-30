@@ -40,8 +40,10 @@ export class ListComponent {
   book64path: string = bookGifBase64;
   private startX = 0;
   private currentX = 0;
+  private distance = 0;
+  private base = 0;
   private isDragging = false;
-  private threshold = 80;
+  private threshold = 60;
 
   private getPunctuation(): void {
     this._punctuationService.getPunctuation().subscribe();
@@ -78,30 +80,31 @@ export class ListComponent {
     this.getAllNames();
   }
 
-  onTouchStart(event: TouchEvent | MouseEvent, index: number) {
+  onTouchStart(event: TouchEvent | MouseEvent, i: number, j: number) {
     this.isDragging = true;
     this.startX = this.getClientX(event);
+    this.base = this.groupedNames()[i].list[j].transform || 0
   }
 
   onTouchMove(event: TouchEvent | MouseEvent, i: number, j: number) {
     if (!this.isDragging) return;
     this.currentX = this.getClientX(event);
-    const diffX = this.currentX - this.startX;
+    
+    const diffX = this.currentX - this.startX + this.base;
 
-    // Only allow left swipe (negative X)
-    if (diffX < 0) {
-      this._nameService.updateTransformNamePosition(diffX, i, j);
-    }
+    if (diffX > 0) return
+    
+    this._nameService.updateTransformNamePosition(diffX, i, j);
+    
   }
 
   onTouchEnd(i: number, j: number) {
     this.isDragging = false;
-    const distance = this.groupedNames()[i].list[j].transform || 0;
-    //const distance = parseInt(transformValue.replace(/translateX\((.*)px\)/, '$1'), 10);
+    this.distance = this.groupedNames()[i].list[j].transform || 0;
 
-    if (distance < -this.threshold) {
+    if (this.distance <= -this.threshold) {
       // Keep bin revealed
-      this._nameService.updateTransformNamePosition(-80, i, j);
+      this._nameService.updateTransformNamePosition(-this.threshold, i, j);
     } else {
       // Return to original position
       this._nameService.updateTransformNamePosition(0, i, j);
