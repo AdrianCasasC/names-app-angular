@@ -69,7 +69,7 @@
             }
           </nz-collapse-panel>
         </nz-collapse>
-        <div class="delete-btn overflow-hidden" [style.width]="name.transform!* -1  + 'px'" (click)="onDeleteName(name?._id || '')">
+        <div class="delete-btn overflow-hidden" [style.width]="name.transform!* -1  + 'px'" (click)="onShowDeleteConfirmModal({id: name?._id || '', name: name?.name || ''})">
           <nz-icon nz-icon nzType="delete" nzTheme="outline" />
         </div>
       </div>

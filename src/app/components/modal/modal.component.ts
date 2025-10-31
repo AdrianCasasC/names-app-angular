@@ -1,4 +1,4 @@
-import { Component, inject, input, output, TemplateRef } from '@angular/core';
+import { Component, effect, inject, input, OnDestroy, OnInit, output, Renderer2, TemplateRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { NgTemplateOutlet } from '@angular/common';
@@ -13,6 +13,7 @@ import { NgTemplateOutlet } from '@angular/common';
 export class ModalComponent {
   /* Injections */
   private readonly _fb = inject(FormBuilder);
+  private readonly _renderer = inject(Renderer2);
 
   /* Inputs */
   show = input<boolean>(false);
@@ -24,6 +25,19 @@ export class ModalComponent {
 
   /* Outputs */
   closeModal = output<void>();
+  body = document.body;
+
+  /* Variables */
+
+  constructor() {
+    effect(() => {
+      if (this.show()) {
+        this._renderer.setStyle(this.body, 'overflow', 'hidden');
+      } else {
+        this._renderer.removeStyle(this.body, 'overflow');
+      }
+    })
+  }
 
   onCloseModal(): void {
     if (this.show()) {
