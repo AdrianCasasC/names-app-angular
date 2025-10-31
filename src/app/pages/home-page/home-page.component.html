@@ -99,7 +99,7 @@
           <nz-icon nz-icon nzType="reload" nzTheme="outline" class="text-primary" />
         </div>
       </div>
-      <div (click)="onSetAddModalState('open')"
+      <div (click)="onSetModalState('add_name','open')"
         class="flex items-center justify-center px-4 py-2 rounded-lg cursor-pointer text-muted-foreground mb-6 bg-primary text-white">
         <nz-icon nz-icon nzType="plus-circle" nzTheme="outline" class="text-white mr-3 text-xl" />
         <span class="text-[16px]">Añadir nombre</span>
@@ -118,7 +118,7 @@
     </div>
   </header>
 
-  <app-list></app-list>
+  <app-list (deleteConfirm)="onShowDeleteConfirmModel($event)"></app-list>
 </div>
 
 <ng-template #nameModal>
@@ -156,7 +156,7 @@
         Añadir Nombre
       </button>
     </div>
-    <button (click)="onSetAddModalState('close')" type="button"
+    <button (click)="onSetModalState('add_name', 'close')" type="button"
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"><svg
         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
@@ -168,5 +168,30 @@
   </form>
 </ng-template>
 
-<app-modal [show]="openAddModal" [ignoreElementsById]="['cdk-overlay-0']" [showCloseIcon]="true" [content]="nameModal"
-  (closeModal)="onSetAddModalState('close')"></app-modal>
+<ng-template #confirmDeleteModal>
+  <div class="px-10 text-center py-6 bg-[hsl(var(--background))] rounded-sm">
+    <span class="mb-6 block">¿Elimiar <strong>{{ selectedDeleteName.name }}</strong>?</span>
+    <div class="flex justify-between gap-2 w-[180px]">
+      <span (click)="onConfirmDelete()" class="w-16 text-center p-3 bg-green-300 rounded-sm cursor-pointer">Sí</span>
+      <span (click)="onSetModalState('confirm_delete', 'close')" class="w-16 text-center p-3 bg-red-300 rounded-sm cursor-pointer">No</span>
+    </div>
+  </div>
+</ng-template>
+
+<app-modal [show]="modals.add_name" [ignoreElementsById]="['cdk-overlay-0']" [showCloseIcon]="true" [content]="nameModal"
+  (closeModal)="onSetModalState('add_name', 'close')"></app-modal>
+
+<app-modal [show]="modals.confirm_delete" [content]="confirmDeleteModal"
+(closeModal)="onSetModalState('confirm_delete', 'close')"></app-modal>
+
+@if (isLoadingMap().get('delete_name')) {
+  <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-[999]">
+    <nz-icon class="w-6 h-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl text-primary" nz-icon nzType="loading" nzTheme="outline" [nzSpin]="true" />
+  </div>
+}
+
+@if (isLoadingMap().get('post_name')) {
+  <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-[999]">
+    <nz-icon class="w-6 h-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl text-primary" nz-icon nzType="loading" nzTheme="outline" [nzSpin]="true" />
+  </div>
+}

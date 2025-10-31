@@ -7,7 +7,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzIconDirective, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
@@ -28,6 +28,7 @@ import { ListComponent } from "../../components/list/list.component";
     NzSwitchModule,
     NzCollapseModule,
     NzIconModule,
+    NzIconDirective,
     NzSelectModule,
     NzSpinModule,
     ModalComponent,
@@ -58,9 +59,13 @@ export class HomePageComponent implements OnInit {
   /* variables */
   book64path: string = bookGifBase64;
   searchValue: string = '';
+  selectedDeleteName: {id: string, name: string} = {id: '', name: ''};
   counter: number = 1000;
   interval: any;
-  openAddModal = false;
+  modals: HomeModal = {
+    add_name: false,
+    confirm_delete: false
+  }
   newDate: Date | null = null;
   nameForm: FormGroup = this._fb.group({
     name: ['', Validators.required],
@@ -119,8 +124,8 @@ export class HomePageComponent implements OnInit {
     })
   }
 
-  onSetAddModalState(state: 'open' | 'close'): void {
-    this.openAddModal = state === 'open';
+  onSetModalState(modal: keyof HomeModal, state: 'open' | 'close'): void {
+    this.modals[modal] = state === 'open';
   }
 
   onReloadNames(): void {
@@ -141,7 +146,7 @@ export class HomePageComponent implements OnInit {
     this._nameService.addName(newName).subscribe({
       next: () => {
         this.nameForm.reset();
-        this.onSetAddModalState('close');
+        this.onSetModalState('add_name', 'close');
         this.init();
       }
     });
@@ -153,4 +158,20 @@ export class HomePageComponent implements OnInit {
     })
   }
 
+  onShowDeleteConfirmModel(deleteName: any): void {
+    this.selectedDeleteName = deleteName;
+    this.onSetModalState('confirm_delete', 'open');
+  }
+  
+  onConfirmDelete(): void {
+    this._nameService.deleteById(this.selectedDeleteName.id).subscribe({
+      next: () => this.onSetModalState('confirm_delete', 'close')
+    });
+    
+  }
+
+}
+interface HomeModal {
+  add_name: boolean;
+  confirm_delete: boolean;
 }

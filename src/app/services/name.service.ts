@@ -123,6 +123,8 @@ export class NameService {
   }
 
   deleteById(id: string): Observable<void> {
+    const mapKey = 'delete_name';
+    this._isLoadingMap.update(prev => prev.set(mapKey, true));
     return this._http.delete<void>(`${this.apiUrl}/names/${id}`)
     .pipe(
       tap(() => {
@@ -132,7 +134,12 @@ export class NameService {
           type: 'success',
           message: '¡Nombre  Eliminado! ✅'
         })
+      }),
+      finalize(() => this._isLoadingMap.update(prev => {
+        prev.delete(mapKey);
+        return prev;
       })
+      )
     )
   }
 }

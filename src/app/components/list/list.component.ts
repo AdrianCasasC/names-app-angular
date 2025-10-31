@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { NameService } from '../../services/name.service';
 import { bookGifBase64 } from '../../constants/base64.constant';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
@@ -29,6 +29,9 @@ export class ListComponent {
   private readonly _nameService = inject(NameService);
   private readonly _punctuationService = inject(PunctuationService);
   private readonly _notificationService = inject(NotificationService);
+
+  /* Outputs */
+  deleteConfirm = output<{id: string, name: string}>();
   
   filter = this._nameService.filter;
   groupLoading = this._nameService.groupLoading;
@@ -111,8 +114,8 @@ export class ListComponent {
     }
   }
 
-  onDeleteName(id: string): void {
-    this._nameService.deleteById(id).subscribe();
+  onShowDeleteConfirmModal(selectedDeleteName: {id: string, name: string}): void {
+    this.deleteConfirm.emit(selectedDeleteName)
   }
 
 }
