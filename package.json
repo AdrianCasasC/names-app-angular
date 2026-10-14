@@ -22,13 +22,13 @@
     "ng-zorro-antd": "^18.2.1",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
-    "tailwindcss": "^3.4.18",
+    "tailwindcss": "^4.3.3",
     "tailwindcss-animate": "^1.0.7",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.21",
+    "@angular-devkit/build-angular": "^21.2.26",
     "@angular/cli": "^18.2.21",
     "@angular/compiler-cli": "^18.2.0",
     "@types/jasmine": "~5.1.0",
